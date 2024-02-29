@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import openai
 
 from django.contrib import auth
+from django.contrib.auth.models import User
 
 openai_api_key = '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'
 openai.api_key = openai_api_key
@@ -38,7 +39,14 @@ def register(request):
         password2 = request.POST['password2']
         
         if password1 == password2:
-            pass
+            try:
+                user = User.objects.create_user(username, email, password1)
+                user.save()
+                auth.login(request, user)
+                return redirect('chatbot')
+            except:
+                error_message = 'Error creating account'
+                return render(request, 'register.html',{'error_message': error_message})
         else:
             error_message = 'Password dont match'
             return render(request, 'register.html',{'error_message': error_message})
