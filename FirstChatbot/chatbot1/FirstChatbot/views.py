@@ -5,7 +5,7 @@ import openai
 from django.contrib import auth
 from django.contrib.auth.models import User
 
-openai_api_key = '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'
+openai_api_key = 'YOUR_API_KEY'
 openai.api_key = openai_api_key
 
 def ask_openai(message):
